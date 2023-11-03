@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace VisionOne.DAL.Repository.Interface
 {
-    internal interface IAdminRepository
+    public interface IAdminRepository
     {
     }
 }

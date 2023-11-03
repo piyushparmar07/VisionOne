@@ -15,16 +15,7 @@ namespace VisionOne.DAL.Infrastructure
         public VisionOneDataContext Init()
         {
 
-            IConfiguration configuration = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json")
-            .Build();
-
-            var connectionString = configuration.GetConnectionString("local");
-
-            var options = new DbContextOptionsBuilder<VisionOneDataContext>()
-                             .UseSqlServer(new SqlConnection(connectionString))
-                             .Options;
+            
             return dbContext ?? (dbContext = string.IsNullOrWhiteSpace(strConn) ? new VisionOneDataContext() : new VisionOneDataContext(strConn));
         }
 

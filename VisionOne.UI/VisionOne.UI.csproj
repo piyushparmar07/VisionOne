@@ -11,4 +11,8 @@
     <Folder Include="Views\User\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\VisionOne.DAL\VisionOne.DAL.csproj" />
+  </ItemGroup>
+
 </Project>

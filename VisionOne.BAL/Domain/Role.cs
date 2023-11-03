@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace VisionOne.DAL.Repository
+namespace VisionOne.BAL.Domain
 {
-    public class AdminRepository
+    public class Role:BaseEntity
     {
+        public string Name { get; set; }
     }
 }

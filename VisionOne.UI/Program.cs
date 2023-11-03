@@ -1,7 +1,20 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using VisionOne.DAL.Data;
+using VisionOne.DAL.Repository;
+using VisionOne.DAL.Repository.Interface;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddMvc();
+//builder.Services.AddTransient<IUserRepository, UserRepository>();
+
+
+//DI 
+builder.Services.AddDbContext<VisionOneDataContext>(options =>
+options.UseSqlServer(builder.Configuration.GetConnectionString("VisionOneDB")));
 
 var app = builder.Build();
 
