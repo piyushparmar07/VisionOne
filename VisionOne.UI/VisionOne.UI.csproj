@@ -12,7 +12,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\VisionOne.DAL\VisionOne.DAL.csproj" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.13">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\VisionOne.BAL\VisionOne.BAL.csproj" />
+    <ProjectReference Include="..\VisionOne.Utility\VisionOne.Core.csproj" />
   </ItemGroup>
 
 </Project>

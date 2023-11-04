@@ -1,21 +1,31 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using System.Reflection;
+using VisionOne.BAL.Service;
+using VisionOne.BAL.Service.Interface;
 using VisionOne.DAL.Data;
+using VisionOne.DAL.Infrastructure;
 using VisionOne.DAL.Repository;
 using VisionOne.DAL.Repository.Interface;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddControllersWithViews();
-builder.Services.AddMvc();
-//builder.Services.AddTransient<IUserRepository, UserRepository>();
-
-
 //DI 
 builder.Services.AddDbContext<VisionOneDataContext>(options =>
-options.UseSqlServer(builder.Configuration.GetConnectionString("VisionOneDB")));
+options.UseSqlServer(builder.Configuration.GetConnectionString("DevConnection")));
 
+// Add services to the container.
+//builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+builder.Services.AddControllersWithViews();
+builder.Services.AddMvc();
+builder.Services.AddScoped<IMainDbContext, VisionOneDataContext>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+builder.Services.AddScoped<IRoleService, RoleService>();
+
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -31,6 +41,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Login}/{action=Index}/{id?}");
 
 app.Run();

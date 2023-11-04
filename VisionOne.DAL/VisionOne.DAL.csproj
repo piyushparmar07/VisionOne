@@ -7,9 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Infrastructure\**" />
-    <EmbeddedResource Remove="Infrastructure\**" />
-    <None Remove="Infrastructure\**" />
+    <Compile Remove="Infrastructure\DbFactory.cs" />
+    <Compile Remove="Infrastructure\Disposable.cs" />
+    <Compile Remove="Infrastructure\IDbContext.cs" />
+    <Compile Remove="Infrastructure\IDbFactory.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\VisionOne.BAL\VisionOne.BAL.csproj" />
+    <ProjectReference Include="..\VisionOne.Utility\VisionOne.Core.csproj" />
   </ItemGroup>
 
 </Project>

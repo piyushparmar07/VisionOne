@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\VisionOne.DAL\VisionOne.DAL.csproj" />
+    <ProjectReference Include="..\VisionOne.Utility\VisionOne.Core.csproj" />
+  </ItemGroup>
+
 </Project>

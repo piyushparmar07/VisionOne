@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace VisionOne.BAL
+namespace VisionOne.Core
 {
     public class BaseEntity
     {

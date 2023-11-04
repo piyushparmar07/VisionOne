@@ -2,77 +2,77 @@
 using System.Linq.Expressions;
 using VisionOne.DAL.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Principal;
+using VisionOne.Core;
 
 namespace VisionOne.DAL.Infrastructure
 {
-    public class RepositoryBase<TEntity> where TEntity : class
+    public class RepositoryBase : IRepository
     {
-        internal VisionOneDataContext context;
-        internal DbSet<TEntity> dbSet;
+        private readonly IMainDbContext _dbContext;
 
-        public RepositoryBase(VisionOneDataContext context)
+
+        public RepositoryBase(IMainDbContext dbContext)
         {
-            this.context = context;
-            this.dbSet = context.Set<TEntity>();
+            _dbContext = dbContext;
         }
 
-        public virtual IEnumerable<TEntity> Get(
-            Expression<Func<TEntity, bool>> filter = null,
-            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-            string includeProperties = "")
+        public async Task<T?> GetById<T>(int id) where T : BaseEntity
         {
-            IQueryable<TEntity> query = dbSet;
-
-            if (filter != null)
-            {
-                query = query.Where(filter);
-            }
-
-            foreach (var includeProperty in includeProperties.Split
-                (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-            {
-                query = query.Include(includeProperty);
-            }
-
-            if (orderBy != null)
-            {
-                return orderBy(query).ToList();
-            }
-            else
-            {
-                return query.ToList();
-            }
+            return await _dbContext.Set<T>().FindAsync(id);
         }
 
-        public virtual TEntity GetByID(object id)
+        public IQueryable<T> FindQueryable<T>(Expression<Func<T, bool>> expression,
+            Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null) where T : BaseEntity
         {
-            return dbSet.Find(id);
+            var query = _dbContext.Set<T>().Where(expression);
+            return orderBy != null ? orderBy(query) : query;
         }
 
-        public virtual void Insert(TEntity entity)
+        public Task<List<T>> FindListAsync<T>(Expression<Func<T, bool>>? expression, Func<IQueryable<T>,
+            IOrderedQueryable<T>>? orderBy = null, CancellationToken cancellationToken = default)
+            where T : class
         {
-            dbSet.Add(entity);
+            var query = expression != null ? _dbContext.Set<T>().Where(expression) : _dbContext.Set<T>();
+            return orderBy != null
+                ? orderBy(query).ToListAsync(cancellationToken)
+                : query.ToListAsync(cancellationToken);
         }
 
-        public virtual void Delete(object id)
+        public Task<List<T>> FindAllAsync<T>(CancellationToken cancellationToken) where T : BaseEntity
         {
-            TEntity entityToDelete = dbSet.Find(id);
-            Delete(entityToDelete);
+            return _dbContext.Set<T>().ToListAsync(cancellationToken);
         }
 
-        public virtual void Delete(TEntity entityToDelete)
+        public Task<T?> SingleOrDefaultAsync<T>(Expression<Func<T, bool>> expression, string includeProperties) where T : BaseEntity
         {
-            if (context.Entry(entityToDelete).State == EntityState.Detached)
-            {
-                dbSet.Attach(entityToDelete);
-            }
-            dbSet.Remove(entityToDelete);
+            var query = _dbContext.Set<T>().AsQueryable();
+
+            query = includeProperties.Split(new char[] { ',' },
+                StringSplitOptions.RemoveEmptyEntries).Aggregate(query, (current, includeProperty)
+                => current.Include(includeProperty));
+
+            return query.SingleOrDefaultAsync(expression);
         }
 
-        public virtual void Update(TEntity entityToUpdate)
+        public T Add<T>(T entity) where T : BaseEntity
         {
-            dbSet.Attach(entityToUpdate);
-            context.Entry(entityToUpdate).State = EntityState.Modified;
+            return _dbContext.Set<T>().Add(entity).Entity;
+        }
+
+        public void Update<T>(T entity) where T : BaseEntity
+        {
+            _dbContext.Entry(entity).State = EntityState.Modified;
+        }
+
+        public void UpdateRange<T>(IEnumerable<T> entities) where T : BaseEntity
+        {
+            _dbContext.Set<T>().UpdateRange(entities);
+        }
+
+        public void Delete<T>(T entity) where T : BaseEntity
+        {
+            _dbContext.Set<T>().Remove(entity);
         }
     }
 }

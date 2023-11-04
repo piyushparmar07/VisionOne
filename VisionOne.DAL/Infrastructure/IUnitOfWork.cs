@@ -1,7 +1,8 @@
 ﻿namespace VisionOne.DAL.Infrastructure
 {
-    public interface IUnitOfWork
+    public interface IUnitOfWork : IDisposable
     {
-        void Commit();
+        IRepository Repository();
+        Task<int> CommitAsync(CancellationToken cancellationToken);
     }
 }

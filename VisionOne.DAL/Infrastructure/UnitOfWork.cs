@@ -5,22 +5,41 @@ namespace VisionOne.DAL.Infrastructure
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly IDbFactory dbFactory;
-        private VisionOneDataContext dbContext;
+        private readonly IMainDbContext _databaseContext;
+        private bool _disposed;
 
-        public UnitOfWork(IDbFactory dbFactory)
+        public UnitOfWork(IMainDbContext databaseContext)
         {
-            this.dbFactory = dbFactory;
+            _databaseContext = databaseContext;
         }
 
-        public VisionOneDataContext DbContext
+        public void Dispose()
         {
-            get { return dbContext ?? (dbContext = dbFactory.Init()); }
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
-        public void Commit()
+        public IRepository Repository()
         {
-            DbContext.Commit();
+            return new RepositoryBase(_databaseContext);
+        }
+
+        public Task<int> CommitAsync(CancellationToken cancellationToken)
+        {
+            return _databaseContext.SaveChangesAsync(cancellationToken);
+        }
+
+        ~UnitOfWork()
+        {
+            Dispose(false);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposed)
+                if (disposing)
+                    _databaseContext.Dispose();
+            _disposed = true;
         }
     }
 }
