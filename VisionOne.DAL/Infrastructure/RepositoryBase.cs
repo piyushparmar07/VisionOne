@@ -4,6 +4,7 @@ using VisionOne.DAL.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Principal;
 using VisionOne.Core;
+using System.Threading;
 
 namespace VisionOne.DAL.Infrastructure
 {
@@ -55,24 +56,29 @@ namespace VisionOne.DAL.Infrastructure
             return query.SingleOrDefaultAsync(expression);
         }
 
-        public T Add<T>(T entity) where T : BaseEntity
+        public T Add<T>(T entity, CancellationToken cancellationToken) where T : BaseEntity
         {
-            return _dbContext.Set<T>().Add(entity).Entity;
+            var obj= _dbContext.Set<T>().Add(entity).Entity;
+            _dbContext.SaveChangesAsync(cancellationToken);
+            return obj;
         }
 
-        public void Update<T>(T entity) where T : BaseEntity
+        public void Update<T>(T entity, CancellationToken cancellationToken) where T : BaseEntity
         {
             _dbContext.Entry(entity).State = EntityState.Modified;
+            _dbContext.SaveChangesAsync(cancellationToken);
         }
 
-        public void UpdateRange<T>(IEnumerable<T> entities) where T : BaseEntity
+        public void UpdateRange<T>(IEnumerable<T> entities, CancellationToken cancellationToken) where T : BaseEntity
         {
             _dbContext.Set<T>().UpdateRange(entities);
+            _dbContext.SaveChangesAsync(cancellationToken);
         }
 
-        public void Delete<T>(T entity) where T : BaseEntity
+        public void Delete<T>(T entity, CancellationToken cancellationToken) where T : BaseEntity
         {
             _dbContext.Set<T>().Remove(entity);
+            _dbContext.SaveChangesAsync(cancellationToken);
         }
     }
 }
