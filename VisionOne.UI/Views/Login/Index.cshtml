@@ -9,25 +9,67 @@
     <div class="login">
         <h1>Login to VisionOne</h1>
 
-        <form method="post" enctype="multipart/form-data" asp-controller="Login" asp-action="Index">
-            <p>
-                @* <input type="text" name="username" value="" placeholder="Username or Email" required autocomplete="false"> *@
-                @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
-            </p>
-            <p>
-                @* <input type="password" name="password" value="" placeholder="Password" required> *@
-                @Html.TextBoxFor(m => m.Password, new { @class = "form-control", @type = "password" })
-                </p>
-           @*  <p class="remember_me">
-                <label>
-                    <input type="checkbox" name="remember_me" id="remember_me">
-                    Remember me on this computer
-                </label>
-            </p> *@
-            <p class="submit"><input type="submit" name="commit" value="Login" formmethod="post"></p>
-            <hr />
-            @ViewBag.message
+        @* <form method="post" enctype="multipart/form-data" asp-controller="Login" asp-action="Index">
+        <p>
+        <input type="text" name="Email" value="" placeholder="Username or Email" required autocomplete="false">
+        </p>
+        <p>
+        <input type="password" name="Password" value="" placeholder="Password" required>
+        </p>
+        <p class="submit"><input type="submit" name="commit" value="Login" formmethod="post"></p>
+        <hr />
+        @ViewBag.message
+        </form>
+        *@
+        <form method="post" enctype="multipart/form-data" asp-controller="Login" asp-action="Index" class="row g-3 needs-validation" novalidate>
+            <div class="col-12">
+                <label for="validationCustomUsername" class="form-label">Username</label>
+                <div class="input-group has-validation">
+                    <input type="text" class="form-control" id="validationCustomUsername" name="Email" value="" placeholder="Email" autocomplete="false" required>
+                    <div class="invalid-feedback">
+                        Please provide a valid username.
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <label for="validationCustom03" class="form-label">Password</label>
+                <div class="input-group has-validation">
+                    <input type="password" class="form-control" id="validationCustom03" name="Password" value="" placeholder="Password" required>
+                    <div class="invalid-feedback">
+                        Please provide a valid password.
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="text-danger">
+                    @ViewBag.message
+                </div>
+            </div>
+            <div class="col-12">
+                <input type="submit" name="commit" value="Login" formmethod="post">
+            </div>
         </form>
     </div>
 </body>
 </html>
+<script>
+    (function () {
+        'use strict'
+
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.querySelectorAll('.needs-validation')
+
+        // Loop over them and prevent submission
+        Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+
+                    form.classList.add('was-validated')
+                }, false)
+            })
+    })()
+</script>

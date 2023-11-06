@@ -35,7 +35,7 @@ namespace VisionOne.UI.Controllers
             }
             else
             {
-                ViewBag.message = string.Format("Login Failed :"+strEmail);
+                ViewBag.message = string.Format("Please enter valid credentials");
                 return View();
             }
         }

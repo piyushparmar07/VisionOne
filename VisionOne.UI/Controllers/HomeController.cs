@@ -55,12 +55,31 @@ namespace VisionOne.UI.Controllers
                 //Sorting  
                 //if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDirection)))
                 //{
-                //    stockData = stockData.OrderBy(sortColumn + " " + sortColumnDirection);
+                //    //stockData = stockData.OrderBy(sortColumn + " " + sortColumnDirection);
+
+                //    bool ascending = sortColumnDirection == "asc";
+                //    switch (sortColumn)
+                //    {
+                //        case "Code":
+                //            stockData = QueryableExtensions.OrderBy(stockData, ascending);
+                //            break;
+                //        case "Location":
+                //            stockData = stockData.OrderBy(p => p.Location, ascending);
+                //            break;
+                //        //case "":
+                //        //    stockData = stockData.OrderBy(p => p.ExchangeMarket.Name, ascending);
+                //        //    break;
+                //        default:
+                //            stockData = stockData.OrderBy(p => p.Id, true);
+                //            break;
+                //    }
+
                 //}
                 //Search  
                 if (!string.IsNullOrEmpty(searchValue))
                 {
-                    stockData = stockData.Where(m => m.Code == searchValue);
+                    stockData = stockData.Where(m => m.Code.ToLower().Contains(searchValue.ToLower()) || m.Location.ToLower().Contains(searchValue.ToLower()) || m.ContainerNumber.ToLower().Contains(searchValue.ToLower()) 
+                    || m.GroupName.ToLower().Contains(searchValue.ToLower()));
                 }
 
                 //total number of rows count   

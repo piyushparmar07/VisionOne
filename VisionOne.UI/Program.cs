@@ -18,15 +18,22 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("DevConnection"))
 //builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 builder.Services.AddControllersWithViews();
 builder.Services.AddMvc();
+
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.Cookie.Name = "__ApplicationSession__";
+    options.IdleTimeout = TimeSpan.FromSeconds(10);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
 builder.Services.AddScoped<IMainDbContext, VisionOneDataContext>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IRoleService, RoleService>();
-
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
-
 builder.Services.AddScoped<IStockRepository, StockRepository>();
 builder.Services.AddScoped<IStockService, StockService>();
 var app = builder.Build();
@@ -41,7 +48,7 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
-
+app.UseSession();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Login}/{action=Index}/{id?}");
