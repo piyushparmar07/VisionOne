@@ -16,6 +16,8 @@ namespace VisionOne.UI.Controllers
         [HttpGet]
         public IActionResult Index()
         {
+            HttpContext.Session.SetString("Name", string.Empty);
+            HttpContext.Session.SetString("Role", string.Empty);
             return View();
         }
 
@@ -28,9 +30,10 @@ namespace VisionOne.UI.Controllers
 
             if (issuccess != null)
             {
-                string Name = string.Format("Successfully logged-in", issuccess.FirstName+" "+issuccess.LastName);
+                string Name = issuccess.FirstName+" "+issuccess.LastName;
                 
-                TempData["username"] = Name;
+                HttpContext.Session.SetString("Name", Name);
+                HttpContext.Session.SetString("Role", issuccess.Role.Name);
                 return RedirectToAction("Index", "Home");
             }
             else

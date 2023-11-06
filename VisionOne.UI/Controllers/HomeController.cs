@@ -20,13 +20,17 @@ namespace VisionOne.UI.Controllers
 
         public IActionResult Index()
         {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("Name")))
+            {
+                return RedirectToAction("Index", "Login");
+            }
             return View();
         }
 
-        public IActionResult ShowGrid()
-        {
-            return View();
-        }
+        //public IActionResult ShowGrid()
+        //{
+        //    return View();
+        //}
 
         public IActionResult LoadData()
         {
@@ -108,6 +112,10 @@ namespace VisionOne.UI.Controllers
         [HttpGet]
         public IActionResult AddEditStock(int Id)
         {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("Name")))
+            {
+                return RedirectToAction("Index", "Login");
+            }
             Stock objStock = new();
             if (Id > 0)
             {

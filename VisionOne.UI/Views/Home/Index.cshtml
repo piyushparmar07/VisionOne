@@ -1,4 +1,6 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@{
     Layout = null;
 }
 
@@ -32,7 +34,8 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - VisionOne.UI</title>
+    <title>VisionOne </title>
+
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/VisionOne.UI.styles.css" asp-append-version="true" />
@@ -42,11 +45,14 @@
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
                 <a class="navbar-brand">VisionOne</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <div>
+                    @if (!string.IsNullOrEmpty(HttpContextAccessor.HttpContext.Session.GetString("Name")))
+                    {
+                        <div>@HttpContextAccessor.HttpContext.Session.GetString("Name")</div>
+                        <form method="post" asp-action="Index" asp-controller="Login">
+                            <input type="button" value="Logout" onClick='Logout();' />
+                        </form>
+                    }
                 </div>
             </div>
         </nav>
@@ -120,19 +126,31 @@
                 {
                     "render": function (data, type, full, meta) { return '<a class="btn btn-info" href="/Home/AddEditStock/' + full.id + '">Edit</a>'; }
                 },
+            
                 {
                     data: null,
                     render: function (data, type, row) {
                         return "<a href='#' class='btn btn-danger' onclick=DeleteData('" + row.id + "'); >Delete</a>";
                     }
                 },
+            
             ]
 
         });
         table.buttons().container()
             .appendTo('#example_wrapper .col-md-6:eq(0)');
+        setTimeout(function () {
+            removeDelete();
+        }, 50);
     });
 
+    function removeDelete()
+    {
+        if ('@(HttpContextAccessor.HttpContext.Session.GetString("Role") == "Admin")' == 'True') {
+            $("#example th:last-child").remove();
+            $("#example td:last-child").remove();
+        }
+    }
 
     function DeleteData(Id) {
 
@@ -181,6 +199,10 @@
                 )
             }
         });
+    }
+
+    function Logout() {
+        window.location = "@Url.Action("Index","Login")";
     }
 
 </script> 

@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using System.Reflection;
 using VisionOne.BAL.Service;
 using VisionOne.BAL.Service.Interface;
@@ -27,6 +28,7 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
+builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 builder.Services.AddScoped<IMainDbContext, VisionOneDataContext>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();

@@ -1,6 +1,4 @@
 ﻿<!DOCTYPE html>
-@using Microsoft.AspNetCore.Http
-@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -15,14 +13,11 @@
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
                 <a class="navbar-brand">VisionOne</a>
-                <div>
-                    @if (!string.IsNullOrEmpty(HttpContextAccessor.HttpContext.Session.GetString("Name")))
-                    {
-                        <div>@HttpContextAccessor.HttpContext.Session.GetString("Name")</div>
-                        <form method="post" asp-action="Index" asp-controller="Login">
-                            <input type="button" value="Logout" onClick='Logout();' />
-                        </form>
-                    }
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                 </div>
             </div>
         </nav>
@@ -42,10 +37,5 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
-    <script>
-        function Logout() {
-            window.location = "@Url.Action("Index","Login")";
-        }
-    </script>
 </body>
 </html>
