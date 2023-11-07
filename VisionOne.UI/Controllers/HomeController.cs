@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 using System.Diagnostics;
 using VisionOne.BAL.Service.Interface;
 using VisionOne.Core.Domain;
@@ -79,6 +80,57 @@ namespace VisionOne.UI.Controllers
                 //    }
 
                 //}
+
+
+                if (sortColumn == "Code" && sortColumnDirection == "asc")
+                {
+                    stockData = stockData.OrderBy(x => x.Code);
+                }
+                else if (sortColumn == "Code" && sortColumnDirection == "desc")
+                {
+                    stockData = stockData.OrderByDescending(x => x.Code);
+                }
+                else if (sortColumn == "Location" && sortColumnDirection == "asc")
+                {
+                    stockData = stockData.OrderBy(x => x.Location);
+                }
+                else if (sortColumn == "Location" && sortColumnDirection == "desc")
+                {
+                    stockData = stockData.OrderByDescending(x => x.Location);
+                }
+                else if(sortColumn == "ContainerNumber" && sortColumnDirection == "asc")
+                {
+                    stockData = stockData.OrderBy(x => x.ContainerNumber);
+                }
+                else if (sortColumn == "ContainerNumber" && sortColumnDirection == "desc")
+                {
+                    stockData = stockData.OrderByDescending(x => x.ContainerNumber);
+                }
+                else if (sortColumn == "GroupName" && sortColumnDirection == "asc")
+                {
+                    stockData = stockData.OrderBy(x => x.GroupName);
+                }
+                else if (sortColumn == "GroupName" && sortColumnDirection == "desc")
+                {
+                    stockData = stockData.OrderByDescending(x => x.GroupName);
+                }
+                else if (sortColumn == "Quantity" && sortColumnDirection == "asc")
+                {
+                    stockData = stockData.OrderBy(x => x.Quantity);
+                }
+                else if (sortColumn == "Quantity" && sortColumnDirection == "desc")
+                {
+                    stockData = stockData.OrderByDescending(x => x.Quantity);
+                }
+                else if (sortColumn == "Rate" && sortColumnDirection == "asc")
+                {
+                    stockData = stockData.OrderBy(x => x.Rate);
+                }
+                else if (sortColumn == "Rate" && sortColumnDirection == "desc")
+                {
+                    stockData = stockData.OrderByDescending(x => x.Rate);
+                }
+
                 //Search  
                 if (!string.IsNullOrEmpty(searchValue))
                 {
