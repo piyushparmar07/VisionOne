@@ -88,7 +88,11 @@
 
     $(document).ready(function () {
         var table = $("#example").DataTable({
-            "pageLength": 5,
+            dom: 'Bfrtip',
+            buttons: [
+                'print'
+            ],
+            "pageLength": 2,
             lengthChange: false,
             buttons: ['copy', 'excel', 'pdf', 'colvis'],
             "processing": true, // for show progress bar
@@ -110,11 +114,23 @@
                 //     alert('error');
                 // }
             },
-            "columnDefs": [{
-                "targets": [0],
+            "columnDefs": [
+                {
+                "target": 0,
                 "visible": false,
                 "searchable": false
-            }],
+            },
+            {
+                "target": 8,
+                    "visible": '@(HttpContextAccessor.HttpContext.Session.GetString("Role") == "Admin")' == 'False'? false:true,
+                "searchable": false
+                },
+                {
+                    "target":7,
+                    "visible": '@(HttpContextAccessor.HttpContext.Session.GetString("Role") == "Admin")' == 'False' ? false : true,
+                    "searchable": false
+                }
+            ],
             "columns": [
                 { "data": "id", "name": "Id", "autoWidth": true },
                 { "data": "code", "name": "Code", "autoWidth": true },
@@ -137,20 +153,10 @@
             ]
 
         });
+        console.log(table);
         table.buttons().container()
             .appendTo('#example_wrapper .col-md-6:eq(0)');
-        setTimeout(function () {
-            removeDelete();
-        }, 50);
     });
-
-    function removeDelete()
-    {
-        if ('@(HttpContextAccessor.HttpContext.Session.GetString("Role") == "Admin")' == 'True') {
-            $("#example th:last-child").remove();
-            $("#example td:last-child").remove();
-        }
-    }
 
     function DeleteData(Id) {
 
