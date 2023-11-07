@@ -31,5 +31,7 @@ namespace VisionOne.Core.Domain
         [Required]
         [Column(TypeName = "decimal(18,2)")]
         public int Rate { get; set; }
+        //[Required]
+        //public DateTime CreatedDate { get; set; } = DateTime.Now;
     }
 }

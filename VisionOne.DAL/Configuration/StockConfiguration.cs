@@ -19,6 +19,7 @@ namespace VisionOne.DAL.Configuration
             entityBuilder.Property(t => t.GroupName).IsRequired();
             entityBuilder.Property(t => t.Quantity).IsRequired();
             entityBuilder.Property(t => t.Rate).IsRequired();
+            //entityBuilder.Property(t => t.CreatedDate).IsRequired();
         }
     }
 }

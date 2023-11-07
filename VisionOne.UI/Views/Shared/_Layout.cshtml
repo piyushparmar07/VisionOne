@@ -18,7 +18,7 @@
                 <div>
                     @if (!string.IsNullOrEmpty(HttpContextAccessor.HttpContext.Session.GetString("Name")))
                     {
-                        <div>@HttpContextAccessor.HttpContext.Session.GetString("Name")</div>
+                        <div>@(HttpContextAccessor.HttpContext.Session.GetString("Name") + " (" + @HttpContextAccessor.HttpContext.Session.GetString("Role") + ")")</div>
                         <form method="post" asp-action="Index" asp-controller="Login">
                             <input type="button" value="Logout" onClick='Logout();' />
                         </form>
